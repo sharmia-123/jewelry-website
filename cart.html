@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cart - ISSAOU</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+
+  <style>
+    *
+    {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body
+    {
+      background-color: #fff3e3;
+    }
+
+   .navbar
+    {
+      width: 100%;
+      height: 80px;
+      background-color: #762E3F;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 30px;
+    }
+
+   .nav-lft
+    {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+   .logo
+    {
+      font-size: 30px;
+      color: #fff3e3;
+      font-weight: bold;
+    }
+
+   .sub-hdng
+    {
+      font-size: 16px;
+      color: #fff3e3;
+      font-family: cursive;
+    }
+
+   .nav-rgt
+    {
+      display: flex;
+      flex-direction: row;
+      gap: 20px;
+    }
+
+   .nav-rgt a
+    {
+      color: #fff3e3;
+      text-decoration: none;
+      font-size: 17px;
+    }
+
+   .cart-main
+    {
+      width: 100%;
+      padding: 30px 20px;
+    }
+
+   .cart-hdng
+    {
+      text-align: center;
+      font-size: 40px;
+      color: #762E3F;
+      font-family: cursive;
+      margin-bottom: 30px;
+    }
+
+   .cart-itm
+    {
+      width: 100%;
+      max-width: 800px;
+      margin: 0 20px ;
+      background: white;
+      display: flex;
+      flex-direction: row;
+      gap: 20px;
+      padding: 15px;
+      border-radius: 15px;
+      align-items: center;
+    }
+
+   .cart-box
+    {
+      width: 120px;
+      height: 120px;
+    }
+
+   .cart-box img
+    {
+      width: 100%;
+      height: 100%;
+      border-radius: 10px;
+      object-fit: cover;
+    }
+
+   .cart-dtls
+    {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      flex: 1;
+    }
+
+   .cart-nm
+    {
+      font-size: 20px;
+      color: #762E3F;
+    }
+
+   .cart-prc
+    {
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+   .qty-rw
+    {
+      display: flex;
+      flex-direction: row;
+      gap: 10px;
+      align-items: center;
+    }
+
+   .qty-btn
+    {
+      width: 30px;
+      height: 30px;
+      background: #762E3F;
+      color: #fff3e3;
+      border: none;
+      border-radius: 5px;
+      font-size: 18px;
+      cursor: pointer;
+    }
+
+   .remove-btn
+    {
+      background: #e63946;
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+   .cart-total
+    {
+      width: 100%;
+      max-width: 800px;
+      margin: 20px auto;
+      text-align: right;
+      font-size: 25px;
+      font-weight: bold;
+      color: #762E3F;
+    }
+
+   .btn-rw
+    {
+      width: 100%;
+      max-width: 800px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: row;
+      gap: 15px;
+      justify-content: flex-end;
+    }
+
+   .btn
+    {
+      padding: 12px 20px;
+      background: #762E3F;
+      color: #fff3e3;
+      border: none;
+      border-radius: 8px;
+      text-decoration: none;
+    }
+
+   .empty-txt
+    {
+      text-align: center;
+      font-size: 20px;
+      color: #762E3F;
+      margin-top: 50px;
+    }
+
+    @media(max-width: 768px)
+    {
+     .cart-itm
+      {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+     .cart-box
+      {
+        width: 100%;
+        height: 200px;
+      }
+
+     .btn-rw
+      {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="navbar">
+    <div class="nav-lft">
+      <div class="logo">ISSAOU</div>
+      <div class="sub-hdng">for every you</div>
+    </div>
+    <div class="nav-rgt">
+      <a href="index.html">Home</a>
+      <a href="wishlist.html">
+        <i class="fa-regular fa-heart"></i>
+        <span id="wishlist-count">0</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="cart-main">
+    <div class="cart-hdng">Your Cart</div>
+    <div id="cart-container"></div>
+    <div class="cart-total" id="total"></div>
+    <div class="btn-rw" id="btns"></div>
+  </div>
+
+  <script>
+    let cart = JSON.parse(localStorage.getItem('issaou_cart')) || [];
+    let wishlist = JSON.parse(localStorage.getItem('issaou_wishlist')) || [];
+    const container = document.getElementById('cart-container');
+
+    function saveToStorage()
+    {
+      localStorage.setItem('issaou_cart', JSON.stringify(cart));
+    }
+
+    function updateCounts()
+    {
+      const wishCountEl = document.getElementById('wishlist-count');
+      if(wishCountEl) wishCountEl.innerText = wishlist.length;
+    }
+
+    function renderCart()
+    {
+      container.innerHTML = '';
+      let total = 0;
+
+      if (cart.length === 0)
+      {
+        container.innerHTML = '<div class="empty-txt">Your cart is empty</div>';
+        document.getElementById('total').innerHTML = '';
+        document.getElementById('btns').innerHTML = '<a href="Home.html" class="btn">Continue Shopping</a>';
+        updateCounts();
+        return;
+      }
+
+      cart.forEach((item, index) =>
+      {
+        if(!item.qty) item.qty = 1;
+        total += item.price * item.qty;
+
+        container.innerHTML += `
+          <div class="cart-itm">
+            <div class="cart-box"><img src="${item.img}"></div>
+            <div class="cart-dtls">
+              <div class="cart-nm">${item.name}</div>
+              <div class="cart-prc">Rs.${item.price.toLocaleString('en-IN')}</div>
+              <div class="qty-rw">
+                <button class="qty-btn" onclick="updateQty(${index}, -1)">-</button>
+                <div>${item.qty}</div>
+                <button class="qty-btn" onclick="updateQty(${index}, 1)">+</button>
+              </div>
+            </div>
+            <button class="remove-btn" onclick="removeItem(${index})">
+              <i class="fa-solid fa-trash"></i>
+            </button>
+          </div>
+        `;
+      });
+
+      document.getElementById('total').innerHTML = `Total: Rs.${total.toLocaleString('en-IN')}`;
+      document.getElementById('btns').innerHTML = `
+        <a href="Home.html" class="btn">Continue Shopping</a>
+        <button class="btn">Checkout</button>
+      `;
+      updateCounts();
+    }
+
+    function updateQty(index, change)
+    {
+      cart[index].qty += change;
+      if (cart[index].qty <= 0) cart.splice(index, 1);
+      saveToStorage();
+      renderCart();
+    }
+
+    function removeItem(index)
+    {
+      cart.splice(index, 1);
+      saveToStorage();
+      renderCart();
+    }
+
+    renderCart();
+  </script>
+</body>
+</html>
