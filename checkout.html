@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Checkout ISSAOU</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+
+<style>
+*
+{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+html,
+body
+{
+    background-color: #fff3e3;
+}
+.navbar
+{
+    width: 100%;
+    height: 80px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 30px;
+    background-color: #762E3F;
+}
+.logo
+{
+    user-select: none;
+    color:#fff3e3;
+    font-size: 35px;
+    font-weight: bold;
+    font-family: 'Playfair Display', serif;
+}
+.sub-logo
+{
+    font-size: 17px;
+    color:#fff3e3;
+    text-align: center;
+    font-family: 'Poppins', sans-serif;
+    user-select: none;
+}
+.icon
+{
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+.icon i
+{
+    font-size: 25px;
+    color:#fff3e3;
+}
+.nav-rgt a
+{
+    color: #fff3e3;
+    text-decoration: none;
+}
+.container
+{
+    width: 90%;
+    flex-wrap: wrap;
+    gap: 30px;
+    display: flex;
+    flex-direction: row;
+    margin: 20px auto;
+}
+/* Cont Lft */
+.cont-lft
+{
+    background: white;
+    border-radius: 15px;
+    width: 50%;
+    height: auto;
+    padding: 30px 20px;
+    gap: 20px;
+    display: flex;
+    flex-direction: column;
+}
+.main-hdng
+{
+    font-size: 25px;
+    color:#5b2230;
+    font-weight: 800;
+}
+.cstmr-dtls
+{
+    width: 90%;
+    height: 40px;
+    border-radius: 10px;
+    color: rgb(168, 164, 164);
+    padding: 25px 10px;
+    font-size: 16px;
+}
+.cstmr-dtls-dlvry
+{
+    width: 90%;
+    height: auto;
+    border-radius: 10px;
+    color: rgb(168, 164, 164);
+    padding: 40px 10px;
+    font-size: 16px;
+}
+.drp-dwn
+{
+    width: 90%;
+    height: auto;
+    padding: 20px 10px;
+    border-radius: 10px;
+    font-size: 16px;
+}
+/* Cont Rgt */
+.cont-rgt
+{
+    width: 30%;
+    height: 350px;
+    background-color: white;
+    border-radius: 15px;
+    padding: 30px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+.odr-rw
+{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    font-size: 20px;
+}
+.odr-btn
+{
+    height: 40px;
+    width: 100%;
+    font-size: 20px;
+    background-color: #762E3F;
+    color: #fff3e3;
+    padding: 10px 0;
+}
+@media(max-width: 768px)
+{
+    .container
+    {
+        display: flex;
+        flex-direction: column;
+    }
+    .cont-lft
+    {
+        width: 100%;
+    }
+    .cont-rgt
+    {
+        width: 100%;
+        height: 300px;
+    }
+}
+</style>
+</head>
+
+<body>
+    <main>
+        <header>
+            <div class="navbar">
+                <div class="nav-lft">
+                    <div class="logo">
+                        ISSAOU
+                    </div>
+                    <div class="sub-logo">
+                        for every you
+                    </div>
+                </div>
+                <div class="nav-rgt">
+                    <div class="icon">
+                        <a href="wishlist.html">
+                        <i class="fa-solid fa-cart-shopping"></i>
+                        <span id="wishlist-count">0</span></a>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <!-- Main Body -->
+         <div class="container">
+            <div class="cont-lft">
+                <div class="main-hdng">
+                    Shipping Information
+                </div>
+                <input type="text" placeholder="Full Name" class="cstmr-dtls">
+                <input type="email" placeholder="Email Address" class="cstmr-dtls">
+                <input type="tel" placeholder="Phone Number" class="cstmr-dtls">
+                <input placeholder="Sipping Address" class="cstmr-dtls-dlvry">
+                 <div class="main-hdng">
+                    Payment Method
+                </div>
+                <select class="drp-dwn">
+                    <option>Cash On Delivery</option>
+                    <option>UPI (Demo)</option>
+                    <option>Credit Or Debit Card (Demo)</option>
+                </select>
+            </div>
+            <div class="cont-rgt">
+                 <div class="main-hdng">
+                    Order Summary
+                </div>
+                <div class="odr-rw">
+                    Total Items 
+                    <span id="items">0</span>
+                </div>
+                <div class="odr-rw">
+                <div class="main-hdng">
+                    Total
+                </div>
+                    <span id="total">₹0</span>
+                </div>
+                <button class="odr-btn" onclick="placeholder()">Place Order</button>
+            </div>
+         </div>
+    </main>
+<script>
+    let cart = JSON.parse(localStorage.getItem("issaou_cart"))||[];
+
+    let total = 0;
+    let items = 0;
+
+    cart.forEach(item => {
+        items += item.qty;
+        total += item.price*item.qty;
+    });
+
+    document.getElementById("items").innerText = items;
+    document.getElementById("total").innerText = "Rs." + total.toLocaleString("en-IN");
+
+    function placeholder(){
+        if(cart.length===0)
+    {
+        alert("Your cart is empty");
+        return;
+    }
+    alert("Thanks for shopping \n\n Your order  has been placed successfully.");
+
+    localStorage.removeItem("issaou_cart");
+    window.location.href="index.html";
+    }
+</script>
+</body>
+</html>

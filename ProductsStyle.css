@@ -115,14 +115,19 @@
     }
     .logo
     {
-        color: #762E3F;
-        font-weight: bold;
+        user-select: none;
+        color:#762E3F;
         font-size: 35px;
+        font-weight: bold;
+        font-family: 'Playfair Display', serif;
     }
     .sub-hdng
     {
+        font-size: 17px;
+        color:#762E3F;
         text-align: center;
-        font-family: cursive;
+        font-family: 'Poppins', sans-serif;
+        user-select: none;
     }
     .icon a
     {
